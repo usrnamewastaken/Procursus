@@ -138,8 +138,8 @@ GNU_HOST_TRIPLE      := aarch64-apple-darwin
 PLATFORM_VERSION_MIN := -mmacosx-version-min=$(MACOS_MIN)
 RUST_TARGET          := aarch64-apple-darwin
 MEMO_PREFIX          ?= /opt/procursus
-MEMO_SUB_PREFIX      ?= /usr
-MEMO_ALT_PREFIX      ?= /usr/local
+MEMO_SUB_PREFIX      ?= 
+MEMO_ALT_PREFIX      ?= 
 
 else
 $(error Platform not supported)
