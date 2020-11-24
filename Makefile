@@ -16,40 +16,58 @@ $(error Please run `umask 022` before running this)
 endif
 
 MEMO_TARGET          ?= iphoneos-arm64
+
+ifneq ($(MEMO_TARGET),darwin-arm64e)
 MEMO_CFVER           ?= 1600
 # iOS 13.0 == 1665.15.
+else
+MEMO_CFVER           ?= 1700
+endif
+
 CFVER_WHOLE          := $(shell echo $(MEMO_CFVER) | cut -d. -f1)
 
 ifeq ($(shell [ "$(CFVER_WHOLE)" -ge 1100 ] && [ "$(CFVER_WHOLE)" -lt 1200 ] && echo 1),1)
 IPHONE_MIN           := 8.0
 TVOS_MIN             := XXX
 WATCH_MIN            := 1.0
+MACOS_MIN            := XXX
 override MEMO_CFVER  := 1100
 else ifeq ($(shell [ "$(CFVER_WHOLE)" -ge 1200 ] && [ "$(CFVER_WHOLE)" -lt 1300 ] && echo 1),1)
 IPHONE_MIN           := 9.0
 TVOS_MIN             := 9.0
 WATCH_MIN            := 2.0
+MACOS_MIN            := XXX
 override MEMO_CFVER  := 1200
 else ifeq ($(shell [ "$(CFVER_WHOLE)" -ge 1300 ] && [ "$(CFVER_WHOLE)" -lt 1400 ] && echo 1),1)
 IPHONE_MIN           := 10.0
 TVOS_MIN             := 10.0
 WATCH_MIN            := 3.0
+MACOS_MIN            := XXX
 override MEMO_CFVER  := 1300
 else ifeq ($(shell [ "$(CFVER_WHOLE)" -ge 1400 ] && [ "$(CFVER_WHOLE)" -lt 1500 ] && echo 1),1)
 IPHONE_MIN           := 11.0
 TVOS_MIN             := 11.0
 WATCH_MIN            := 4.0
+MACOS_MIN            := XXX
 override MEMO_CFVER  := 1400
 else ifeq ($(shell [ "$(CFVER_WHOLE)" -ge 1500 ] && [ "$(CFVER_WHOLE)" -lt 1600 ] && echo 1),1)
 IPHONE_MIN           := 12.0
 TVOS_MIN             := 12.0
 WATCH_MIN            := 5.0
+MACOS_MIN            := XXX
 override MEMO_CFVER  := 1500
 else ifeq ($(shell [ "$(CFVER_WHOLE)" -ge 1600 ] && [ "$(CFVER_WHOLE)" -lt 1700 ] && echo 1),1)
 IPHONE_MIN           := 13.0
 TVOS_MIN             := 13.0
 WATCH_MIN            := 6.0
+MACOS_MIN            := XXX
 override MEMO_CFVER  := 1600
+else ifeq ($(shell [ "$(CFVER_WHOLE)" -ge 1700 ] && [ "$(CFVER_WHOLE)" -lt 1800 ] && echo 1),1)
+IPHONE_MIN           := 14.0
+TVOS_MIN             := 14.0
+WATCH_MIN            := 7.0
+MACOS_MIN            := 11.0
+override MEMO_CFVER  := 1700
 else
 $(error Unsupported CoreFoundation version)
 endif
@@ -95,6 +113,14 @@ PLATFORM             := watchos
 DEB_ARCH             := watchos-arm
 GNU_HOST_TRIPLE      := aarch64-apple-darwin
 PLATFORM_VERSION_MIN := -mwatchos-version-min=$(WATCH_MIN)
+
+else ifeq ($(MEMO_TARGET),darwin-arm64e)
+$(warning Building for aarch64 macOS)
+ARCHES               := arm64e
+PLATFORM             := macosx
+DEB_ARCH             := darwin-arm64e
+GNU_HOST_TRIPLE      := aarch64-apple-darwin
+PLATFORM_VERSION_MIN := -mmacosx-version-min=$(MACOS_MIN)
 
 else
 $(error Platform not supported)

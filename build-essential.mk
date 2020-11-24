@@ -12,6 +12,8 @@ else ifeq ($(PLATFORM),appletvos)
 BARE_PLATFORM := AppleTVOS
 else ifeq ($(PLATFORM),watchos)
 BARE_PLATFORM := WatchOS
+else ifeq ($(PLATFORM),macosx)
+BARE_PLATFORM := MacOSX
 else
 $(error Unsupported platform $(PLATFORM))
 endif
