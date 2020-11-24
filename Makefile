@@ -80,6 +80,9 @@ DEB_ARCH             := iphoneos-arm
 GNU_HOST_TRIPLE      := armv7-apple-darwin
 PLATFORM_VERSION_MIN := -miphoneos-version-min=$(IPHONE_MIN)
 RUST_TARGET          := armv7-apple-ios
+MEMO_PREFIX          ?= /
+MEMO_SUB_PREFIX      ?= /usr
+MEMO_ALT_PREFIX      ?= /usr/local
 
 else ifeq ($(MEMO_TARGET),iphoneos-arm64)
 $(warning Building for iOS)
@@ -89,6 +92,9 @@ DEB_ARCH             := iphoneos-arm
 GNU_HOST_TRIPLE      := aarch64-apple-darwin
 PLATFORM_VERSION_MIN := -miphoneos-version-min=$(IPHONE_MIN)
 RUST_TARGET          := aarch64-apple-ios
+MEMO_PREFIX          ?= /
+MEMO_SUB_PREFIX      ?= /usr
+MEMO_ALT_PREFIX      ?= /usr/local
 
 else ifeq ($(MEMO_TARGET),appletvos-arm64)
 $(warning Building for tvOS)
@@ -97,6 +103,9 @@ PLATFORM             := appletvos
 DEB_ARCH             := appletvos-arm64
 GNU_HOST_TRIPLE      := aarch64-apple-darwin
 PLATFORM_VERSION_MIN := -mappletvos-version-min=$(TVOS_MIN)
+MEMO_PREFIX          ?= /
+MEMO_SUB_PREFIX      ?= /usr
+MEMO_ALT_PREFIX      ?= /usr/local
 
 else ifeq ($(MEMO_TARGET),watchos-arm)
 $(warning Building for WatchOS)
@@ -105,6 +114,9 @@ PLATFORM             := watchos
 DEB_ARCH             := watchos-arm
 GNU_HOST_TRIPLE      := armv7k-apple-darwin
 PLATFORM_VERSION_MIN := -mwatchos-version-min=$(WATCH_MIN)
+MEMO_PREFIX          ?= /
+MEMO_SUB_PREFIX      ?= /usr
+MEMO_ALT_PREFIX      ?= /usr/local
 
 else ifeq ($(MEMO_TARGET),watchos-arm64)
 $(warning Building for WatchOS)
@@ -113,6 +125,9 @@ PLATFORM             := watchos
 DEB_ARCH             := watchos-arm
 GNU_HOST_TRIPLE      := aarch64-apple-darwin
 PLATFORM_VERSION_MIN := -mwatchos-version-min=$(WATCH_MIN)
+MEMO_PREFIX          ?= /
+MEMO_SUB_PREFIX      ?= /usr
+MEMO_ALT_PREFIX      ?= /usr/local
 
 else ifeq ($(MEMO_TARGET),darwin-arm64e)
 $(warning Building for aarch64 macOS)
@@ -121,6 +136,10 @@ PLATFORM             := macosx
 DEB_ARCH             := darwin-arm64e
 GNU_HOST_TRIPLE      := aarch64-apple-darwin
 PLATFORM_VERSION_MIN := -mmacosx-version-min=$(MACOS_MIN)
+RUST_TARGET          := aarch64-apple-darwin
+MEMO_PREFIX          ?= /opt/procursus
+MEMO_SUB_PREFIX      ?= /usr
+MEMO_ALT_PREFIX      ?= /usr/local
 
 else
 $(error Platform not supported)
@@ -197,10 +216,6 @@ BUILD_DIST      := $(BUILD_ROOT)/build_dist/$(MEMO_TARGET)/$(MEMO_CFVER)
 BUILD_STRAP     := $(BUILD_ROOT)/build_strap/$(MEMO_TARGET)/$(MEMO_CFVER)
 # Extra scripts for the buildsystem
 BUILD_TOOLS     := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))/build_tools
-# Prefixs
-MEMO_PREFIX     ?= /
-MEMO_SUB_PREFIX ?= /usr
-MEMO_ALT_PREFIX ?= /usr/local
 
 CFLAGS              := -O2 $(ARCH) -isysroot $(TARGET_SYSROOT) $(PLATFORM_VERSION_MIN) -isystem $(BUILD_BASE)/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include -isystem $(BUILD_BASE)/$(MEMO_PREFIX)$(MEMO_ALT_PREFIX)/include -F$(BUILD_BASE)/$(MEMO_PREFIX)/System/Library/Frameworks
 CXXFLAGS            := $(CFLAGS)
